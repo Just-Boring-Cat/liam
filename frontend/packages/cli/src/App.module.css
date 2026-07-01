@@ -1,0 +1,178 @@
+.workspace {
+  --workspace-background: var(--global-background);
+  --workspace-panel: var(--global-muted-background);
+  --workspace-panel-strong: var(--pane-muted-background);
+  --workspace-border: var(--pane-border);
+  --workspace-text: var(--global-foreground);
+  --workspace-muted: var(--global-mute-text);
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  height: 100dvh;
+  color: var(--workspace-text);
+  background: var(--workspace-background);
+}
+
+.workspace[data-theme='light'] {
+  --global-background: #f5f7f9;
+  --global-muted-background: #ffffff;
+  --global-foreground: #171a1f;
+  --global-border: #d7dce2;
+  --global-body-text: #303640;
+  --global-mute-text: #66717f;
+  --overlay-5: rgba(0, 0, 0, 0.05);
+  --overlay-10: rgba(0, 0, 0, 0.1);
+  --overlay-20: rgba(0, 0, 0, 0.2);
+  --overlay-30: rgba(0, 0, 0, 0.3);
+  --overlay-40: rgba(0, 0, 0, 0.4);
+  --overlay-50: rgba(0, 0, 0, 0.5);
+  --overlay-60: rgba(0, 0, 0, 0.6);
+  --overlay-70: rgba(0, 0, 0, 0.7);
+  --overlay-100: #000000;
+  --pane-border: #d7dce2;
+  --pane-border-hover: #b8c1cc;
+  --pane-border-active: #9ba6b2;
+  --pane-background: #ffffff;
+  --pane-muted-background: #eef2f6;
+  --pane-background-hover: #e8edf3;
+  --pane-background-active: #e1e7ee;
+  --workspace-background: #f5f7f9;
+  --workspace-panel: #ffffff;
+  --workspace-panel-strong: #eef2f6;
+  --workspace-border: #d7dce2;
+  --workspace-text: #171a1f;
+  --workspace-muted: #66717f;
+}
+
+.header {
+  z-index: var(--z-index-header);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: var(--spacing-4);
+  align-items: center;
+  min-height: var(--layout-app-bar-height);
+  padding: 0 var(--spacing-4);
+  background: var(--workspace-panel);
+  border-bottom: 1px solid var(--workspace-border);
+}
+
+.titleGroup {
+  display: grid;
+  grid-template-columns: auto minmax(0, max-content);
+  gap: var(--spacing-3);
+  align-items: center;
+  min-width: 0;
+}
+
+.brandMark {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  font-family: var(--main-font);
+  font-size: var(--font-size-4);
+  font-weight: 700;
+  color: #001a0e;
+  background: var(--primary-color);
+  border-radius: var(--border-radius-full);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--main-font);
+  font-size: var(--font-size-5);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  font-family: var(--main-font);
+  font-size: var(--font-size-2);
+  color: var(--workspace-muted);
+}
+
+.diagramTabs {
+  display: grid;
+  grid-auto-flow: column;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1);
+  background: var(--workspace-panel-strong);
+  border: 1px solid var(--workspace-border);
+  border-radius: var(--border-radius-md);
+}
+
+.tabButton {
+  min-width: 72px;
+  height: 30px;
+  padding: 0 var(--spacing-3);
+  font-family: var(--main-font);
+  font-size: var(--font-size-3);
+  font-weight: 600;
+  color: var(--workspace-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+}
+
+.tabButton:hover {
+  color: var(--workspace-text);
+  background: var(--pane-background-hover);
+}
+
+.tabButton[data-active='true'] {
+  color: var(--workspace-text);
+  background: var(--workspace-panel);
+  box-shadow: inset 0 0 0 1px var(--workspace-border);
+}
+
+.themeToggle {
+  display: grid;
+  grid-auto-flow: column;
+  gap: var(--spacing-2);
+  align-items: center;
+  font-family: var(--main-font);
+  font-size: var(--font-size-2);
+  color: var(--workspace-muted);
+}
+
+.themeToggle input {
+  width: 36px;
+  height: 20px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+}
+
+.diagramSurface {
+  position: relative;
+  min-height: 0;
+}
+
+.diagramPanel {
+  position: absolute;
+  inset: 0;
+  display: none;
+  min-height: 0;
+}
+
+.diagramPanel[data-active='true'] {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .header {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
+  }
+
+  .diagramTabs {
+    justify-content: start;
+  }
+
+  .themeToggle {
+    justify-content: start;
+  }
+}

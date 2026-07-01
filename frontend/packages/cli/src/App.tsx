@@ -10,6 +10,8 @@ import { type Schema, schemaSchema } from '@liam-hq/schema'
 import { ResultAsync } from 'neverthrow'
 import { useEffect, useState } from 'react'
 import * as v from 'valibot'
+import styles from './App.module.css'
+import { C4Diagram } from './C4Diagram'
 
 const emptySchema: Schema = {
   tables: {},
@@ -67,7 +69,14 @@ function getSidebarSettingsFromCookie(): {
 }
 
 function App() {
+  const searchParams = new URLSearchParams(window.location.search)
+  const initialDiagram = searchParams.get('diagram') === 'c4' ? 'c4' : 'erd'
+  const initialTheme = searchParams.get('theme') === 'light' ? 'light' : 'dark'
   const [schema, setSchema] = useState<Schema>(emptySchema)
+  const [activeDiagram, setActiveDiagram] = useState<'erd' | 'c4'>(
+    initialDiagram,
+  )
+  const [theme, setTheme] = useState<'dark' | 'light'>(initialTheme)
   const { isOpen: defaultSidebarOpen, panelSizes } =
     getSidebarSettingsFromCookie()
 
@@ -83,13 +92,70 @@ function App() {
 
   return (
     <VersionProvider version={version}>
-      <ErdRendererProvider schema={{ current: schema }}>
-        <ERDRenderer
-          withAppBar
-          defaultSidebarOpen={defaultSidebarOpen}
-          defaultPanelSizes={panelSizes}
-        />
-      </ErdRendererProvider>
+      <div className={styles.workspace} data-theme={theme}>
+        <header className={styles.header}>
+          <div className={styles.titleGroup}>
+            <span className={styles.brandMark}>L</span>
+            <div>
+              <h1 className={styles.title}>Liam Diagrams</h1>
+              <p className={styles.subtitle}>ERD and C4 workspace prototype</p>
+            </div>
+          </div>
+
+          <nav className={styles.diagramTabs} aria-label="Diagram type">
+            <button
+              type="button"
+              className={styles.tabButton}
+              data-active={activeDiagram === 'erd'}
+              onClick={() => setActiveDiagram('erd')}
+            >
+              ERD
+            </button>
+            <button
+              type="button"
+              className={styles.tabButton}
+              data-active={activeDiagram === 'c4'}
+              onClick={() => setActiveDiagram('c4')}
+            >
+              C4
+            </button>
+          </nav>
+
+          <label className={styles.themeToggle}>
+            <span>Light</span>
+            <input
+              type="checkbox"
+              checked={theme === 'dark'}
+              onChange={(event) =>
+                setTheme(event.target.checked ? 'dark' : 'light')
+              }
+            />
+            <span>Dark</span>
+          </label>
+        </header>
+
+        <main className={styles.diagramSurface}>
+          <section
+            className={styles.diagramPanel}
+            data-active={activeDiagram === 'erd'}
+            aria-hidden={activeDiagram !== 'erd'}
+          >
+            <ErdRendererProvider schema={{ current: schema }}>
+              <ERDRenderer
+                defaultSidebarOpen={defaultSidebarOpen}
+                defaultPanelSizes={panelSizes}
+              />
+            </ErdRendererProvider>
+          </section>
+          <section
+            className={styles.diagramPanel}
+            data-active={activeDiagram === 'c4'}
+            aria-hidden={activeDiagram !== 'c4'}
+          >
+            <C4Diagram />
+          </section>
+        </main>
+      </div>
     </VersionProvider>
   )
 }
